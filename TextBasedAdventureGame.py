@@ -25,67 +25,57 @@ print("Welcome to a game! (currently without a name!)")
 while alive == True:
     if playerX in clearingLocationX and playerY in clearingLocationY:
         zone = "clearing"
-        if recentMove == 1:
-            if previousZone == zone:
-                print("You move further into the", zone + ".")
-            else:
-                print("You have moved into a", zone + ".")
-            recentMove = 0
-        else:
-            print("You are in a", zone + ".")
-        previousZone = zone
     elif playerX in forestLocationX and playerY in forestLocationY:
         zone = "forest"
-        if recentMove == 1:
-            if previousZone == zone:
-                print("You move further into the", zone + ".")
-            else:
-                print("You have moved into a", zone + ".")
-            recentMove = 0
-        else:
-            print("You are in a", zone + ".")
-        previousZone = zone
-    elif playerX in desertLocationX and playerY in desertLocationY:
+    elif playerX in desertLocationX and PlayerY in desertLocationY:
         zone = "desert"
-        if recentMove == 1:
-            if previousZone == zone:
-                print("You move further into the", zone + ".")
-            else:
-                print("You have moved into a", zone + ".")
-            recentMove = 0
+    if recentMove == 1:
+        if previousZone == zone:
+            print("You move further into the", zone + ".")
         else:
-            print("You are in a", zone + ".")
-        previousZone = zone
+            print("You have moved into a", zone + ".")
+        recentMove = 0
+    else:
+        print("You are in a", zone + ".")
+    previousZone = zone
 
     playerInput = input()
     playerInput = playerInput.lower()
     playerInputSplit = playerInput.split()
     if playerInputSplit[0] in moveWords or northWords or eastWords or southWords or westWords:
         if playerInputSplit[0] in northWords:
-            playerY += 1
-            recentMove = 1
-        elif playerInputSplit[0] in southWords:
-            playerY += -1
-            recentMove = 1
-        elif playerInputSplit[0] in eastWords:
-            playerX += 1
-            recentMove = 1
-        elif playerInputSplit[0] in westWords:
-            playerX += -1
-            recentMove = 1
-        elif len(playerInputSplit) > 1:
-            if playerInputSplit[1] in northWords:
+            if not playerY + 1 in borderLocationY:
                 playerY += 1
                 recentMove = 1
-            elif playerInputSplit[1] in southWords:
+        elif playerInputSplit[0] in southWords:
+            if not playerY - 1 in borderLocationY:
                 playerY += -1
                 recentMove = 1
-            elif playerInputSplit[1] in eastWords:
+        elif playerInputSplit[0] in eastWords:
+            if not playerX + 1 in borderLocationX:
                 playerX += 1
                 recentMove = 1
-            elif playerInputSplit[1] in westWords:
+        elif playerInputSplit[0] in westWords:
+            if not playerX - 1 in borderLocationX:
                 playerX += -1
                 recentMove = 1
+        elif len(playerInputSplit) > 1:
+            if playerInputSplit[1] in northWords:
+                if not playerY + 1 in borderLocationY:
+                    playerY += 1
+                    recentMove = 1
+            elif playerInputSplit[1] in southWords:
+                if not playerY - 1 in borderLocationY:
+                    playerY += -1
+                    recentMove = 1
+            elif playerInputSplit[1] in eastWords:
+                if not playerX + 1 in borderLocationX:
+                    playerX += 1
+                    recentMove = 1
+            elif playerInputSplit[1] in westWords:
+                if not playerX - 1 in borderLocationX:
+                    playerX += -1
+                    recentMove = 1
             else:
                 print("This is not a valid input!")
                 alive = False
