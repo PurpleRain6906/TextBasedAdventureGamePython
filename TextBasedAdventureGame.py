@@ -1,92 +1,72 @@
-alive = True
-playerX = 0
-playerY = 0
-zone = "clearing"
-recentMove = 0
-northWords = ["w","up","north"]
-eastWords = ["d","right","east"]
-southWords = ["s","down","south"]
-westWords = ["a","left","west"]
-moveWords = ["move","go","travel","wander","run","walk","proceed","progress","advance","journey","trudge"]
-clearingLocationX = [-3,-2,-1,0,1,2,3,4]
-clearingLocationY = [-4,-3,-2,-1,0,1,2,3]
-forestLocationX = [-13,-12,-11,-10,-9,-8,-7,-6,-5,-4]
-forestLocationY = [-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11]
-desertLocationX = [-3,-2,-1,0,1,2,3,4,5,6,7,8]
-desertLocationY = [4,5,6,7,8,9,10,11,12,13]
-BorderLocationX = [9,-14]
-BorderLocationY = [-6,14]
+import random
+import time
 
+class Words:
+    northWords = ["w","forwards","north"]
+    eastWords = ["d","right","east"]
+    southWords = ["s","backwards","south"]
+    westWords = ["a","left","west"]
+    moveWords = ["move","go","travel","wander","run","walk","proceed","progress","advance","journey","trudge"]
 
-
-
-
-print("Welcome to a game! (currently without a name!)")
-while alive == True:
-    if playerX in clearingLocationX and playerY in clearingLocationY:
-        zone = "clearing"
-    elif playerX in forestLocationX and playerY in forestLocationY:
-        zone = "forest"
-    elif playerX in desertLocationX and PlayerY in desertLocationY:
-        zone = "desert"
-    if recentMove == 1:
-        if previousZone == zone:
-            print("You move further into the", zone + ".")
-        else:
-            print("You have moved into a", zone + ".")
-        recentMove = 0
-    else:
-        print("You are in a", zone + ".")
-    previousZone = zone
-
-    playerInput = input()
-    playerInput = playerInput.lower()
-    playerInputSplit = playerInput.split()
-    if playerInputSplit[0] in moveWords or northWords or eastWords or southWords or westWords:
-        if playerInputSplit[0] in northWords:
-            if not playerY + 1 in borderLocationY:
-                playerY += 1
-                recentMove = 1
-        elif playerInputSplit[0] in southWords:
-            if not playerY - 1 in borderLocationY:
-                playerY += -1
-                recentMove = 1
-        elif playerInputSplit[0] in eastWords:
-            if not playerX + 1 in borderLocationX:
-                playerX += 1
-                recentMove = 1
-        elif playerInputSplit[0] in westWords:
-            if not playerX - 1 in borderLocationX:
-                playerX += -1
-                recentMove = 1
-        elif len(playerInputSplit) > 1:
-            if playerInputSplit[1] in northWords:
-                if not playerY + 1 in borderLocationY:
-                    playerY += 1
-                    recentMove = 1
-            elif playerInputSplit[1] in southWords:
-                if not playerY - 1 in borderLocationY:
-                    playerY += -1
-                    recentMove = 1
-            elif playerInputSplit[1] in eastWords:
-                if not playerX + 1 in borderLocationX:
-                    playerX += 1
-                    recentMove = 1
-            elif playerInputSplit[1] in westWords:
-                if not playerX - 1 in borderLocationX:
-                    playerX += -1
-                    recentMove = 1
+class Player:
+    alive = True
+    maxHealth = 5
+    health = maxHealth
+    x = 0
+    y = 0
+    z = 0
+    coords = str(x) + "." + str(y)
+    invalid = 1
+    isMoving = False
+    zone = "Forest"
+    def UpdateCoords():
+        Player.coords = "(" + str(Player.x) + "." + str(Player.y) + ")"
+    def Input():
+        Input = input().lower().split()
+        return Input
+    def Move():
+        inputSplit = Player.Input()
+        if inputSplit[0] in Words.eastWords:
+            Player.x += 1
+            Player.isMoving = True
+        elif inputSplit[0] in Words.westWords:
+            Player.x -= 1
+            Player.isMoving = True
+        elif inputSplit[0] in Words.northWords:
+            Player.y += 1
+            Player.isMoving = True
+        elif inputSplit[0] in Words.southWords:
+            Player.y -= 1
+            Player.isMoving = True
+        elif inputSplit[0] in Words.moveWords:
+            if inputSplit[1] in Words.eastWords:
+                Player.x += 1
+                Player.isMoving = True
+            elif inputSplit[1] in Words.westWords:
+                Player.x -= 1
+                Player.isMoving = True
+            elif inputSplit[1] in Words.northWords:
+                Player.y += 1
+                Player.isMoving = True
+            elif inputSplit[1] in Words.southWords:
+                Player.y -= 1
+                Player.isMoving = True
             else:
-                print("This is not a valid input!")
-                alive = False
+                Player.invalid -= 1
+                Player.isMoving = False
         else:
-            print("This is not a valid input!")
-            alive = False
-print("You are in a", zone + ".")
+            Player.invalid -= 1
+            Player.isMoving = False
+        
+class Enemies:
+    health = 5
+
 while 1:
-    deathInput = input()
-    if deathInput != "restart":
-        print("You are dead. You cannot", deathInput + ". Input 'restart' to restart.")
-    else:
-        print("Welcome to a game! (currently without a name!)")
-        alive = True
+    print(Player.alive)
+    print(Player.x)
+    print(Player.y)
+    print(Player.z)
+    print(Player.coords)
+    print(Player.isMoving)
+    Player.Move()
+    Player.UpdateCoords()
