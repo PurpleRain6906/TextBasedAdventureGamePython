@@ -33,16 +33,24 @@ class Words:
 ]
 
 class Items:
-    class Words:
-        bladedWeapons = ["Katana","Claymore","Scimitar","Glaive","Warhammer","Dual Wielded Daggers","Kama","Nunchaku","Khopesh","Gladius"]
-        rangedWeapons = ["Longbow","Shortbow","Composite Bow","Crossbow","Sling","Throwing Spears","Hunting Sling","Atlatl","Blowgun","Hand Cannon"]
-        magicScrolls = ["Fireball Scroll", "Ice Bolt Scroll", "Healing Touch Scroll","Lightning Strike Scroll", "Invisibility Scroll", "Telekinesis Scroll","Summon Creature Scroll", "Mind Control Scroll", "Haste Scroll","Illusion Scroll"]
-        companions = ["Dog", "Cat", "Hawk", "Horse", "Monkey", "Wolf", "Giant Lizard","Small Dragon", "Robot", "Ghost"]
-        allWeapons = bladedWeapons + rangedWeapons + magicScrolls + companions
-        bladedWeaponsDesc = ["A curved, single-edged sword known for its elegance and lethality in skilled hands. Offers good slashing damage and quick attacks.","A large, two-handed sword with a broad blade. Ideal for powerful swings and crowd control.","A curved, single-edged sword with a forward-pointing tip. Excellent for thrusting attacks and precise cuts.","A long, two-handed weapon with a spear-like point and a single-edged blade at the end. Good for both thrusting and sweeping attacks.","A versatile weapon with a heavy, blunt head and often spikes or hooks. Effective against armored enemies and can deliver crushing blows.","A pair of small, pointed knives used for lightning-fast attacks and exploiting enemy openings. Great for agile characters.","A single-edged, curved blade resembling a sickle. Useful for both slashing and reaping attacks, can also disarm enemies.","Two wooden staves connected by a rope or chain. Offers fast, close-range strikes and can disarm enemies.","A curved sword with a distinctive, forward-curving blade. Good for slashing attacks and can hook around enemy shields.","A short sword with a straight, double-edged blade. Ideal for thrusting attacks in close formation combat."]
-        rangedWeaponsDesc = ["A powerful bow known for its long range and accuracy. Requires significant strength to draw back the string.","A smaller, more agile bow than the longbow, ideal for mounted archers or close-quarters combat.","Made from different materials laminated together, offering power and flexibility. Popular in Asian cultures.","A mechanical bow with a trigger mechanism, allowing for easier aiming and deadlier bolts.","A simple weapon using a projectile and a strap for launching. Often used by lightly-armored skirmishers.","A versatile weapon for throwing or close-quarters combat. Can be used for single targets or area denial.","A heavier version of the sling, capable of launching larger projectiles or even stones for siege warfare.","A throwing stick that adds leverage and power to spears, increasing their range and lethality.","A silent weapon using small darts that can inflict damage or status effects like poison. Useful for stealthy attacks or hunting small game.","A heavy, single-shot firearm with a long reload time. Powerful against armored enemies but cumbersome to use."]
-        magicScrollsDesc = ["Hurls a blazing orb at the target, dealing significant fire damage and potentially inflicting a burning effect that deals damage over time.","Launches a shard of enchanted ice, piercing the target and dealing cold damage. May also slow their movement or even freeze them momentarily.","Bathes a target in restorative energy, mending their wounds and restoring lost health. Can be used on yourself or an ally.","Calls down a bolt of crackling lightning from the heavens, striking a single enemy or arcing between multiple foes in a chain. Deals significant electrical damage and may stun them momentarily.","Shrouds the caster in an illusion, masking their presence from sight. Useful for sneaking past enemies or repositioning for a surprise attack. The effect fades after a short duration.","Grants the user temporary control over nearby objects with their mind. This allows them to throw objects at enemies, disarm them, or even create temporary barriers for defense.","Unfurls a magical portal, summoning a powerful creature to fight alongside the caster for a limited time. The type of creature varies depending on the scroll.","Briefly seizes control of an enemy's mind, turning them against their allies for a short duration. This can be a powerful tactical tool to turn the tide of battle.","Imbues the caster or an ally with invigorating energy, granting them increased movement speed and attack speed for a limited time. This allows for a flurry of attacks or a quick escape.","Weaves a convincing illusion to deceive enemies. This could be a decoy to distract them, a false image to hide the caster's true location, or even a terrifying apparition to demoralize foes."]
-        companionDesc = ["A loyal and versatile companion offering both offensive and defensive support. Can be trained for combat, tracking, or resource gathering.","A nimble and independent companion, providing scouting and stealth benefits. Can inflict minor damage on enemies.","A high-flying companion offering aerial recon and distraction tactics. Can mark enemies for the player and potentially carry small items.","A reliable mount for increased travel speed and maneuverability. Can be used for combat charges or swift escapes.","A playful and agile companion with surprising climbing and thieving abilities. Can access hidden areas and retrieve items.","A fierce and pack-oriented companion, useful for flanking attacks and overwhelming enemies. Requires strong leadership from the player.","A powerful and intimidating companion, offering brute force and protection in combat. Can also be used for transporting heavy items.","A rare and powerful companion, capable of breathing fire or other elemental attacks. Requires a high level of training and care.","A customizable companion with various functionalities depending on its programming. Can be used for combat, exploration, or crafting assistance.","An ethereal companion with unique abilities like phasing through walls and scouting enemy positions. May have limitations in direct combat."]
+    scrolls = {
+        "Vampiric Echo" : {
+            "rarity" : "legendary",
+            "effect" : "50% chance for an extra 10% vampiric strike"
+        },
+        "Echo" : {
+            "rarity" : "rare",
+            "effect" : "50% chance for an extra strike."
+        },
+        "Vampiric" : {
+            "rarity" : "epic",
+            "effect" : "Your main strike is 10% vampiric."
+        },
+        "Mnemonic" : {
+            "rarity" : "rare",
+            "effect" : "You store 10% of the damage dealt each time. This can be released for a damage bonus."
+        },
+    }
 
 class Player:
     alive = True
@@ -54,39 +62,40 @@ class Player:
     coords = str(x) + ", " + str(y)
     invalid = 1
     isMoving = False
+    attack = True
     zone = "Forest"
-    inventory = ["Fireball Scroll"]
+    inventory = []
+    equips = []
     def UpdateCoords():
         Player.coords = "(" + str(Player.x) + ", " + str(Player.y) + ")"
     def Input():
-        Input = input().lower().split()
+        Input = input(">").lower().split()
         return Input
     def Move():
-        inputSplit = Player.Input()
-        if len(inputSplit) > 0:
-            if inputSplit[0] in Words.eastWords:
+        if len(Input) > 0:
+            if Input[0] in Words.eastWords:
                 Player.x += 1
                 Player.isMoving = True
-            elif inputSplit[0] in Words.westWords:
+            elif Input[0] in Words.westWords:
                 Player.x -= 1
                 Player.isMoving = True
-            elif inputSplit[0] in Words.northWords:
+            elif Input[0] in Words.northWords:
                 Player.y += 1
                 Player.isMoving = True
-            elif inputSplit[0] in Words.southWords:
+            elif Input[0] in Words.southWords:
                 Player.y -= 1
                 Player.isMoving = True
-            elif inputSplit[0] in Words.moveWords:
-                if inputSplit[1] in Words.eastWords:
+            elif Input[0] in Words.moveWords:
+                if Input[1] in Words.eastWords:
                     Player.x += 1
                     Player.isMoving = True
-                elif inputSplit[1] in Words.westWords:
+                elif Input[1] in Words.westWords:
                     Player.x -= 1
                     Player.isMoving = True
-                elif inputSplit[1] in Words.northWords:
+                elif Input[1] in Words.northWords:
                     Player.y += 1
                     Player.isMoving = True
-                elif inputSplit[1] in Words.southWords:
+                elif Input[1] in Words.southWords:
                     Player.y -= 1
                     Player.isMoving = True
                 else:
@@ -100,14 +109,6 @@ class Player:
         for i in Counter(Player.inventory).keys():
             print("}---> " + str(i) + " x" + str(Counter(Player.inventory)[i]))
         print("}------------------------------{")
-    class Fight:
-        def Options():
-            inputNum = 0
-            for item in Counter(Player.inventory).keys()
-            if "Fireball Scroll" in Counter(Player.inventory).keys():
-                inputNum += 1
-                print(f"{inputNum}. ")
-            fireNum = inputNum
 
 class Enemies:
     def nymph():
@@ -118,17 +119,15 @@ class Enemies:
 
 while 1:
     if Player.alive == True:
-        Player.Fight.Options()
-        Enemies.nymph()
-        Enemies.Pan()
+        Input = Player.Input()
+        Player.Move()
+        Player.UpdateCoords()
+        Player.checkInv()
         print(Player.alive)
         print(Player.x)
         print(Player.y)
         print(Player.z)
         print(Player.coords)
         print(Player.isMoving)
-        Player.Move()
-        Player.UpdateCoords()
-        Player.checkInv()
     else:
         print("You have died!")
